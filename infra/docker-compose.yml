@@ -8,15 +8,18 @@ services:
       - '5432:5432'
     volumes:
       - db_data:/var/lib/postgresql/data
+
   chroma:
     image: ghcr.io/chroma-core/chroma:latest
     ports:
       - '8000:8000'
     volumes:
-      - chroma_data:/chroma/.chroma/index
+      - chroma_data:/chroma/.chroma
+
   backend:
-    build: ../backend
-    command: poetry run uvicorn app.main:app --host 0.0.0.0 --port 8001
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
     environment:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/postgres
       CHROMA_HOST: http://chroma:8000
@@ -25,13 +28,16 @@ services:
       - chroma
     ports:
       - '8001:8001'
+
   frontend:
-    build: ../frontend
-    command: npm run dev
-    ports:
-      - '3000:3000'
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
     depends_on:
       - backend
+    ports:
+      - '3000:3000'
+
 volumes:
   db_data:
   chroma_data:
