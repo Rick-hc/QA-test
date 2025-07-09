@@ -21,3 +21,6 @@ async def get_answer(req: AnswerRequest, session: AsyncSession = Depends(get_ses
     if not qa:
         raise HTTPException(status_code=404, detail="Not found")
     return AnswerResponse(answer=qa.answer, pdf_url=qa.pdf_url)
+# ここは、ユーザーが選択した質問に対する回答を取得するエンドポイントです。
+# データベースから質問IDに基づいて回答を取得し、結果を返します。
+# もし質問が見つからない場合は、404エラーを返します。また、回答と関連するPDFのURLも返します。

@@ -11,13 +11,14 @@ class QueryResponse(BaseModel):
     candidates: list[str]
 
 @router.post("", response_model=QueryResponse)
+# Userのクエリを受け取り、GPTを使って候補質問を生成するエンドポイント
 async def generate_candidates(req: QueryRequest):
     prompt = (
         "ユーザーの質問を改善するため、関連しそうな候補質問を5つまで日本語で箇条書きで出力してください: "
         f"{req.user_query}"
     )
     chat = await openai.AsyncOpenAI().chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-4.1-nano",
         messages=[{"role": "user", "content": prompt}],
     )
     text = chat.choices[0].message.content

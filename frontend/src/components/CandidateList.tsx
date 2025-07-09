@@ -1,5 +1,5 @@
 import React from 'react'
-
+// このコードは、ユーザーが選択肢から質問を選ぶためのコンポーネントです。
 interface Props {
   candidates: string[]
   onSelect: (q: string) => void

@@ -1,3 +1,6 @@
+#  このコードはEmbeddingを使用して、ユーザーの質問に関連する候補質問を生成し、選択肢として表示します。
+#　また、閾値を設定して、関連性の高い質問のみを表示します。
+#  }
 from fastapi import APIRouter
 from pydantic import BaseModel
 from typing import List
@@ -17,7 +20,8 @@ class SearchResult(BaseModel):
 
 class SearchResponse(BaseModel):
     results: List[SearchResult]
-
+# ここが検索エンドポイントです。
+# ユーザーが選択した候補質問に対して、関連する質問を検索し、結果を返します。    
 @router.post("", response_model=SearchResponse)
 async def search(req: SearchRequest):
     embed_client = openai.AsyncOpenAI()
@@ -28,7 +32,9 @@ async def search(req: SearchRequest):
             input=q,
         )
         embeddings.append(emb.data[0].embedding)
-
+# ここで、ChromaDBを使用して、埋め込みを検索します。
+# 埋め込みは、ユーザーの質問と候補質問の関連性を示します。
+#　また、ｎ_resultsを5に設定して、最も関連性の高い質問を5つ取得します。
     results = []
     for idx, emb in enumerate(embeddings):
         docs = collection.query(query_embeddings=[emb], n_results=5)

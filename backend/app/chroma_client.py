@@ -1,7 +1,13 @@
+# app/chroma_client.py
 import os
 import chromadb
+from urllib.parse import urlparse
 
-CHROMA_HOST = os.getenv("CHROMA_HOST", "http://localhost:8000")
+raw = os.getenv("CHROMA_HOST", "http://chroma:8000")
+parts = urlparse(raw)
 
-client = chromadb.HttpClient(host=CHROMA_HOST.replace("http://", ""))
-collection = client.get_or_create_collection("default")
+client = chromadb.HttpClient(
+    host=parts.hostname or "chroma",
+    port=parts.port or 8000,
+    ssl=parts.scheme == "https",
+)
