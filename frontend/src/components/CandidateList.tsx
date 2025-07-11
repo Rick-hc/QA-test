@@ -1,22 +1,28 @@
 import React from 'react'
 // このコードは、ユーザーが選択肢から質問を選ぶためのコンポーネントです。
-interface Props {
-  candidates: string[]
-  onSelect: (q: string) => void
+interface Candidate {
+  q_id: string
+  question: string
 }
 
-const CandidateList: React.FC<Props> = ({ candidates, onSelect }) => {
-  const [other, setOther] = React.useState('')
+interface Props {
+  results: Candidate[]
+  onSelect: (q_id: string) => void
+}
 
+const CandidateList: React.FC<Props> = ({ results, onSelect }) => {
   return (
     <div className="space-y-2">
-      {candidates.map(c => (
-        <label key={c} className="block">
-          <input type="radio" name="cand" value={c} onChange={() => onSelect(c)} /> {c}
+      {results.map(r => (
+        <label key={r.q_id} className="block">
+          <input
+            type="radio"
+            name="cand"
+            value={r.q_id}
+            onChange={() => onSelect(r.q_id)}
+          /> {r.question}
         </label>
       ))}
-      <input type="radio" name="cand" value={other} onChange={() => onSelect(other)} />
-      <input value={other} onChange={e => setOther(e.target.value)} className="border" placeholder="その他" />
     </div>
   )
 }
