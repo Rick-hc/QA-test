@@ -1,6 +1,5 @@
 from alembic import op
 import sqlalchemy as sa
-import uuid
 
 revision = '0001'
 down_revision = None
@@ -10,14 +9,14 @@ depends_on = None
 def upgrade() -> None:
     op.create_table(
         'qa',
-        sa.Column('q_id', sa.UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+        sa.Column('q_id', sa.String(length=36), primary_key=True, nullable=False),
         sa.Column('question', sa.Text, nullable=False),
         sa.Column('answer', sa.Text, nullable=False),
         sa.Column('pdf_url', sa.String, nullable=True),
     )
     op.create_table(
         'search_log',
-        sa.Column('id', sa.UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+        sa.Column('id', sa.String(length=36), primary_key=True, nullable=False),
         sa.Column('user_query', sa.Text, nullable=False),
         sa.Column('q1_list', sa.Text, nullable=False),
         sa.Column('selected_q2', sa.Text, nullable=True),

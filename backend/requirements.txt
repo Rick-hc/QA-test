@@ -1,0 +1,13 @@
+fastapi>=0.111
+uvicorn[standard]>=0.30
+sqlalchemy[asyncio]>=2.0
+aiosqlite>=0.20          # SQLite を使う場合
+alembic>=1.13
+pydantic>=2.7
+python-dotenv>=1.0
+chromadb>=0.5.4
+
+# ---- 開発用 ----
+pytest>=8.2
+ruff>=0.4
+mypy>=1.10

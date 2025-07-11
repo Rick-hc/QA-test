@@ -1,13 +1,6 @@
-# app/chroma_client.py
-import os
-import chromadb
-from urllib.parse import urlparse
+﻿import chromadb
 
-raw = os.getenv("CHROMA_HOST", "http://chroma:8000")
-parts = urlparse(raw)
-
-client = chromadb.HttpClient(
-    host=parts.hostname or "chroma",
-    port=parts.port or 8000,
-    ssl=parts.scheme == "https",
-)
+# β版: サーバー不要なローカル in-memory モードで起動
+client = chromadb.Client()
+# コレクション名は任意。なければ作成されます
+collection = client.get_or_create_collection("default_collection")

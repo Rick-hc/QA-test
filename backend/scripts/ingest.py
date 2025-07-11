@@ -1,4 +1,7 @@
-# backend/scripts/ingest.py
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 import os
 import argparse
 import uuid
@@ -44,7 +47,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="複数の Excel ファイル（ローカルパス or URL）を読み込み、QA と Embedding を登録"
     )
-    # 複数可に変更
     parser.add_argument(
         "excels",
         nargs="*",
@@ -52,13 +54,10 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    # ■① コマンド引数があればそれを使い、なければ環境変数 QA_EXCEL_URLS を読む
     paths = args.excels or os.getenv("QA_EXCEL_URLS", "").split(",")
-    # ■② 空エントリを除去
     paths = [p.strip() for p in paths if p.strip()]
 
     if not paths:
         raise SystemExit("エクセルのパス or URL を引数 or 環境変数 QA_EXCEL_URLS で指定してください")
 
-    # ■③ リストを main() に渡す
     asyncio.run(main(paths))
